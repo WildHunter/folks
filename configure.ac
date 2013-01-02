@@ -635,6 +635,8 @@ AC_CONFIG_FILES([
     folks/org.freedesktop.folks.gschema.xml
     Makefile
     backends/Makefile
+    backends/dummy/Makefile
+    backends/dummy/lib/Makefile
     backends/key-file/Makefile
     backends/libsocialweb/Makefile
     backends/libsocialweb/lib/Makefile

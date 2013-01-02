@@ -1,4 +1,5 @@
 SUBDIRS = \
+	dummy \
 	key-file \
 	$(NULL)
 
