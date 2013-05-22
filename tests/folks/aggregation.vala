@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Collabora Ltd.
+ * Copyright (C) 2013 Philip Withnall
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,6 +16,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors: Travis Reitter <travis.reitter@collabora.co.uk>
+ *          Philip Withnall <philip@tecnocode.co.uk>
  */
 
 using Gee;
@@ -150,18 +152,10 @@ public class AggregationTests : TpfTest.MixedTestCase
 
       Idle.add (() =>
         {
-          aggregator.prepare.begin ((s,r) =>
+          this.test_iid_async.begin ((s, r) =>
             {
-              try
-                {
-                  aggregator.prepare.end (r);
-                }
-              catch (GLib.Error e1)
-                {
-                  GLib.critical ("Failed to prepare aggregator: %s",
-                    e1.message);
-                  assert_not_reached ();
-                }
+              this.test_iid_async.end (r);
+              main_loop.quit ();
             });
 
           return false;

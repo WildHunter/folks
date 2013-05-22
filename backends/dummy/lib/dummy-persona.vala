@@ -153,6 +153,14 @@ public class Dummyf.Persona : Folks.Persona
         }
     }
 
+
+  /*
+   * All the functions below here are to be used by testing code rather than by
+   * libfolks clients. They form the interface which would normally be between
+   * the Persona and a web service or backing store of some kind.
+   */
+
+
   /**
    * TODO
    *

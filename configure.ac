@@ -662,6 +662,7 @@ AC_CONFIG_FILES([
     tests/tracker/Makefile
     tests/lib/Makefile
     tests/lib/folks-test-uninstalled.pc
+    tests/lib/dummy/Makefile
     tests/lib/eds/Makefile
     tests/lib/key-file/Makefile
     tests/lib/libsocialweb/Makefile

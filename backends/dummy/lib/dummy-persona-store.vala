@@ -23,10 +23,14 @@ using Gee;
 using GLib;
 
 /**
- * A persona store representing a single EDS address book. TODO
+ * A persona store which allows {@link Dummyf.Persona}s to be programmatically
+ * created and manipulated, for the purposes of testing the core of libfolks
+ * itself.
  *
- * The persona store will contain {@link Dummy.Persona}s for each contact in the
- * address book it represents.
+ * TODO: Mock functions
+ * TODO: Unstable API
+ *
+ * TODO
  *
  * TODO: trust_level and is_user_set_default can be set as normal properties
  *
@@ -192,12 +196,12 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Create a new PersonaStore.
+   * Create a new persona store.
    *
-   * Create a new persona store to store the {@link Persona}s for the contacts
-   * in ``s``. Passing a re-used source registry to the constructor (compared to
-   * the old {@link Dummy.PersonaStore} constructor) saves a lot of time and
-   * D-Bus round trips. TODO
+   * This store will have no personas to begin with; use
+   * {@link Dummyf.PersonaStore.register_personas} to add some, then call
+   * {@link Dummyf.PersonaStore.reach_quiescence} to signal the store reaching
+   * quiescence.
    *
    * @param id The new store's ID.
    * @param display_name The new store's display name.
@@ -219,6 +223,43 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
     {
       this._personas = new HashMap<string, Persona> ();
       this._personas_ro = this._personas.read_only_view;
+    }
+
+  /**
+   * Type of a mock function for {@link PersonaStore.add_persona_from_details}.
+   *
+   * See {@link Dummyf.PersonaStore.add_persona_from_details_mock}.
+   *
+   * @param persona the persona being added to the store, as constructed from
+   * the details passed to {@link PersonaStore.add_persona_from_details}.
+   * @throws PersonaStoreError to be thrown from
+   * {@link PersonaStore.add_persona_from_details}
+   * @since UNRELEASED
+   */
+  public delegate void AddPersonaFromDetailsMock (Persona persona)
+      throws PersonaStoreError;
+
+  /**
+   * Mock function for {@link PersonaStore.add_persona_from_details}.
+   *
+   * This function is called whenever this store's
+   * {@link PersonaStore.add_persona_from_details} method is called. It allows
+   * the caller to determine whether adding the given persona should fail, by
+   * throwing an error from this mock function. If no error is thrown from this
+   * function, adding the given persona will succeed. This is useful for testing
+   * error handling of calls to {@link PersoneStore.add_persona_from_details}.
+   *
+   * If this is ``null``, all calls to
+   * {@link PersonaStore.add_persona_from_details} will succeed.
+   *
+   * This mock function may be changed at any time; changes will take effect for
+   * the next call to {@link PersonaStore.add_persona_from_details}.
+   *
+   * @since UNRELEASED
+   */
+  public unowned AddPersonaFromDetailsMock? add_persona_from_details_mock
+    {
+      get; set; default = null;
     }
 
   /**
@@ -251,7 +292,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    * @since UNRELEASED
    */
   public override async Folks.Persona? add_persona_from_details (
-      HashTable<string, Value?> details) throws Folks.PersonaStoreError
+      HashTable<string, Value?> details) throws PersonaStoreError
     {
       // We have to have called prepare() beforehand.
       if (!this._is_prepared)
@@ -260,8 +301,20 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
               "Persona store has not yet been prepared.");
         }
 
-      /* TODO: Allow overriding the class used. */
-      var persona = new Dummyf.Persona (this, "TODO", false, {});
+      /* Allow overriding the class used. */
+      var contact_id = "TODO";
+      var uid = Folks.Persona.build_uid (BACKEND_NAME, this.id, contact_id);
+      var iid = this.id + ":" + contact_id;
+
+      var persona = Object.new (this._persona_type,
+          "display-id", contact_id,
+          "uid", uid,
+          "iid", iid,
+          "store", this,
+          "is-user", false,
+          null) as Dummyf.Persona;
+      assert (persona != null);
+      persona.update_writeable_properties (this.always_writeable_properties);
 
       var iter = HashTableIter<string, Value?> (details);
       unowned string k;
@@ -388,7 +441,14 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
             }*/
         }
 
-      /* TODO: How to simulate failure? */
+      /* Allow the caller to inject failures into add_persona_from_details()
+       * by providing a mock function which can throw errors as appropriate. */
+      if (this.add_persona_from_details_mock != null)
+        {
+          this.add_persona_from_details_mock (persona);
+        }
+
+      /* No simulated failure: continue adding the persona. */
       this._personas.set (persona.iid, persona);
 
       /* Notify of the new persona. */
@@ -397,6 +457,42 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       this._emit_personas_changed (added_personas, null);
 
       return persona;
+    }
+
+  /**
+   * Type of a mock function for {@link PersonaStore.remove_persona}.
+   *
+   * See {@link Dummyf.PersonaStore.remove_persona_mock}.
+   *
+   * @param persona the persona being removed from the store
+   * @throws PersonaStoreError to be thrown from
+   * {@link PersonaStore.remove_persona}
+   * @since UNRELEASED
+   */
+  public delegate void RemovePersonaMock (Persona persona)
+      throws PersonaStoreError;
+
+  /**
+   * Mock function for {@link PersonaStore.remove_persona}.
+   *
+   * This function is called whenever this store's
+   * {@link PersonaStore.remove_persona} method is called. It allows
+   * the caller to determine whether removing the given persona should fail, by
+   * throwing an error from this mock function. If no error is thrown from this
+   * function, removing the given persona will succeed. This is useful for
+   * testing error handling of calls to {@link PersoneStore.remove_persona}.
+   *
+   * If this is ``null``, all calls to {@link PersonaStore.remove_persona} will
+   * succeed.
+   *
+   * This mock function may be changed at any time; changes will take effect for
+   * the next call to {@link PersonaStore.remove_persona}.
+   *
+   * @since UNRELEASED
+   */
+  public unowned RemovePersonaMock? remove_persona_mock
+    {
+      get; set; default = null;
     }
 
   /**
@@ -416,7 +512,8 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    * @since UNRELEASED
    */
   public override async void remove_persona (Folks.Persona persona)
-      throws Folks.PersonaStoreError
+      throws PersonaStoreError
+      requires (persona is Dummyf.Persona)
     {
       // We have to have called prepare() beforehand.
       if (!this._is_prepared)
@@ -425,9 +522,15 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
               "Persona store has not yet been prepared.");
         }
 
-      /* TODO: How to simulate failure? */
+      /* Allow the caller to inject failures into remove_persona()
+       * by providing a mock function which can throw errors as appropriate. */
+      if (this.remove_persona_mock != null)
+        {
+          this.remove_persona_mock ((Dummyf.Persona) persona);
+        }
+
       Persona? _persona = this._personas.get (persona.iid);
-      if (persona != null)
+      if (_persona != null)
         {
           this._personas.unset (persona.iid);
 
@@ -446,15 +549,50 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
     }
 
   /**
+   * Type of a mock function for {@link PersonaStore.prepare}.
+   *
+   * See {@link Dummyf.PersonaStore.prepare_mock}.
+   *
+   * @throws PersonaStoreError to be thrown from {@link PersonaStore.prepare}
+   * @since UNRELEASED
+   */
+  public delegate void PrepareMock () throws PersonaStoreError;
+
+  /**
+   * Mock function for {@link PersonaStore.prepare}.
+   *
+   * This function is called whenever this store's
+   * {@link PersonaStore.prepare} method is called on an unprepared store. It
+   * allows the caller to determine whether preparing the store should fail, by
+   * throwing an error from this mock function. If no error is thrown from this
+   * function, preparing the store will succeed (and all future calls to
+   * {@link PersonaStore.prepare} will return immediately without calling this
+   * mock function). This is useful for testing error handling of calls to
+   * {@link PersoneStore.prepare}.
+   *
+   * If this is ``null``, all calls to {@link PersonaStore.prepare} will
+   * succeed.
+   *
+   * This mock function may be changed at any time; changes will take effect for
+   * the next call to {@link PersonaStore.prepare}.
+   *
+   * @since UNRELEASED
+   */
+  public unowned PrepareMock? prepare_mock
+    {
+      get; set; default = null;
+    }
+
+  /**
    * Prepare the PersonaStore for use.
    *
    * See {@link Folks.PersonaStore.prepare}.
    *
-   * @throws Folks.PersonaStoreError.STORE_OFFLINE if the EDS store is offline
+   * @throws Folks.PersonaStoreError.STORE_OFFLINE if the store is offline
    * @throws Folks.PersonaStoreError.PERMISSION_DENIED if permission was denied
-   * to open the EDS store
+   * to open the store
    * @throws Folks.PersonaStoreError.INVALID_ARGUMENT if any other error
-   * occurred in the EDS store
+   * occurred in the store
    *
    * @since UNRELEASED
    */
@@ -471,6 +609,13 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       try
         {
           this._prepare_pending = true;
+
+          /* Allow the caller to inject failures into prepare() by providing a
+           * mock function which can throw errors as appropriate. */
+          if (this.prepare_mock != null)
+            {
+              this.prepare_mock ();
+            }
 
           this._is_prepared = true;
           this.notify_property ("is-prepared");
@@ -490,12 +635,55 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       Internal.profiling_end ("preparing Dummy.PersonaStore");
     }
 
+
+  /*
+   * All the functions below here are to be used by testing code rather than by
+   * libfolks clients. They form the interface which would normally be between
+   * the PersonaStore and a web service or backing store of some kind.
+   */
+
+
+  private Type _persona_type = typeof (Dummyf.Persona);
+
   /**
-   * TODO
+   * Type of programmatically created personas.
    *
-   * @param can_add_personas TODO
-   * @param can_alias_personas TODO
-   * @param can_remove_personas TODO
+   * This is the type used to create new personas when
+   * {@link PersonaStore.add_persona_from_details} is called. It must be a
+   * subtype of {@link Dummyf.Persona}.
+   *
+   * This may be modified at any time, with modifications taking effect for the
+   * next call to {@link PersonaStore.add_persona_from_details}.
+   *
+   * @since UNRELEASED
+   */
+  public Type persona_type
+    {
+      get { return this._persona_type; }
+      set
+        {
+          assert (value.is_a (typeof (Dummyf.Persona)));
+          if (this._persona_type != value)
+            {
+              this._persona_type = value;
+              this.notify_property ("persona-type");
+            }
+        }
+    }
+
+  /**
+   * Set capabilities of the persona store.
+   *
+   * This sets the capabilities of the store, as if they were changed on a
+   * backing store somewhere. This is intended to be used for testing code which
+   * depends on the values of {@link PersonaStore.can_add_personas},
+   * {@link PersonaStore.can_alias_personas} and
+   * {@link PersonaStore.can_remove_personas}.
+   *
+   * @param can_add_personas whether the store can handle adding personas
+   * @param can_alias_personas whether the store can handle and update
+   * user-specified persona aliases
+   * @param can_remove_personas whether the store can handle removing personas
    * @since UNRELEASED
    */
   public void set_capabilities (MaybeBool can_add_personas,

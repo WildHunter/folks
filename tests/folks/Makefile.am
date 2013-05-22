@@ -8,7 +8,9 @@ AM_CPPFLAGS = \
 	$(TP_GLIB_CFLAGS) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/folks \
+	-I$(top_srcdir)/backends/dummy/lib \
 	-I$(top_srcdir)/tests/lib \
+	-I$(top_srcdir)/tests/lib/dummy \
 	-I$(top_srcdir)/tests/lib/key-file \
 	-I$(top_srcdir)/tests/lib/telepathy \
 	-I$(top_srcdir)/tests/lib/telepathy/contactlist \
@@ -17,9 +19,11 @@ AM_CPPFLAGS = \
 
 LDADD = \
 	$(top_builddir)/tests/lib/libfolks-test.la \
+	$(top_builddir)/tests/lib/dummy/libdummy-test.la \
 	$(top_builddir)/tests/lib/key-file/libkf-test.la \
 	$(top_builddir)/tests/lib/telepathy/libtpf-test.la \
 	$(top_builddir)/tests/lib/telepathy/contactlist/libtp-test-contactlist.la \
+	$(top_builddir)/backends/dummy/lib/libfolks-dummy.la \
 	$(top_builddir)/folks/libfolks.la \
 	$(GLIB_LIBS) \
 	$(GEE_LIBS) \
@@ -36,8 +40,12 @@ AM_VALAFLAGS += \
 	--vapidir=$(abs_builddir) \
 	--vapidir=$(abs_top_srcdir)/folks \
 	--vapidir=$(abs_top_builddir)/folks \
+	--vapidir=$(abs_top_srcdir)/backends/dummy/lib \
+	--vapidir=$(abs_top_builddir)/backends/dummy/lib \
 	--vapidir=$(abs_top_srcdir)/tests/lib \
 	--vapidir=$(abs_top_builddir)/tests/lib \
+    --vapidir=$(abs_top_srcdir)/tests/lib/dummy \
+	--vapidir=$(abs_top_builddir)/tests/lib/dummy \
 	--vapidir=$(abs_top_srcdir)/tests/lib/key-file \
 	--vapidir=$(abs_top_builddir)/tests/lib/key-file \
 	--vapidir=$(abs_top_srcdir)/tests/lib/telepathy \
@@ -50,9 +58,11 @@ AM_VALAFLAGS += \
 	--pkg folks \
 	--pkg folks-generics \
 	--pkg folks-test \
+	--pkg dummy-test \
 	--pkg kf-test \
 	--pkg tpf-test \
 	--pkg tp-test-contactlist \
+	--pkg folks-dummy \
 	-g \
 	$(NULL)
 

@@ -22,6 +22,7 @@
 
 using Folks;
 using GLib;
+using Gee;
 
 public class Folks.TestUtils
 {

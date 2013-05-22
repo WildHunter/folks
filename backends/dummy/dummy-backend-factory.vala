@@ -43,5 +43,5 @@ public void module_init (BackendStore backend_store)
  */
 public void module_finalize (BackendStore backend_store)
 {
-  /* TODO */
+  /* TODO: No backend_store.remove_backend() API exists. */
 }

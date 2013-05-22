@@ -16,7 +16,9 @@
  *
  * Authors:
  *       Philip Withnall <philip@tecnocode.co.uk>
- * TODO
+ *       Travis Reitter <travis.reitter@collabora.co.uk>
+ *       Marco Barisione <marco.barisione@collabora.co.uk>
+ *       Raul Gutierrez Segales <raul.gutierrez.segales@collabora.co.uk>
  */
 
 using Folks;
@@ -668,9 +670,13 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         });
     }
 
-  /**
-   * TODO All the functions below here are...
+
+  /*
+   * All the functions below here are to be used by testing code rather than by
+   * libfolks clients. They form the interface which would normally be between
+   * the Persona and a web service or backing store of some kind.
    */
+
 
   private HashSet<T> _dup_to_hash_set<T> (Set<T> input_set)
     {
@@ -696,6 +702,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
       return output_multi_map;
     }
 
+  /**
+   * Update persona's gender.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link GenderDetails.gender} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param gender persona's new gender
+   * @since UNRELEASED
+   */
   public void update_gender (Gender gender)
     {
       if (this._gender != gender)
@@ -705,6 +722,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's birthday calendar event ID.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link BirthdayDetails.calendar_event_id} property. It is intended to be
+   * used for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
+   *
+   * @param calendar_event_id persona's new birthday calendar event ID
+   * @since UNRELEASED
+   */
   public void update_calendar_event_id (string? calendar_event_id)
     {
       if (calendar_event_id != this._calendar_event_id)
@@ -714,6 +742,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's birthday.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link BirthdayDetails.birthday} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param birthday persona's new birthday
+   * @since UNRELEASED
+   */
   public void update_birthday (DateTime? birthday)
     {
       if ((this._birthday == null) != (birthday == null) ||
@@ -725,6 +764,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's roles.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link RoleDetails.roles} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param roles persona's new roles
+   * @since UNRELEASED
+   */
   public void update_roles (Set<RoleFieldDetails> roles)
     {
       if (!Folks.Internal.equal_sets<RoleFieldDetails> (roles, this._roles))
@@ -735,6 +785,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's groups.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link GroupDetails.groups} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param groups persona's new groups
+   * @since UNRELEASED
+   */
   public void update_groups (Set<string> groups)
     {
       if (!Folks.Internal.equal_sets<string> (groups, this._groups))
@@ -745,6 +806,18 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's web service addresses.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link WebServiceDetails.web_service_addresses} property. It is intended to
+   * be used for testing code which consumes this property. If the property
+   * value changes, this results in a property change notification on the
+   * persona.
+   *
+   * @param web_service_addresses persona's new web service addresses
+   * @since UNRELEASED
+   */
   public void update_web_service_addresses (
       MultiMap<string, WebServiceFieldDetails> web_service_addresses)
     {
@@ -758,6 +831,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's e-mail addresses.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link EmailDetails.email_addresses} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
+   *
+   * @param email_addresses persona's new e-mail addresses
+   * @since UNRELEASED
+   */
   public void update_email_addresses (Set<EmailFieldDetails> email_addresses)
     {
       if (!Folks.Internal.equal_sets<EmailFieldDetails> (email_addresses,
@@ -770,6 +854,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
        }
     }
 
+  /**
+   * Update persona's notes.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link NoteDetails.notes} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param notes persona's new notes
+   * @since UNRELEASED
+   */
   public void update_notes (Set<NoteFieldDetails> notes)
     {
       if (!Folks.Internal.equal_sets<NoteFieldDetails> (notes, this._notes))
@@ -780,6 +875,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's full name.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link NameDetails.full_name} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param full_name persona's new full name
+   * @since UNRELEASED
+   */
   public void update_full_name (string full_name)
     {
       if (this._full_name != full_name)
@@ -789,6 +895,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's nickname.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link NameDetails.nickname} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param nickname persona's new nickname
+   * @since UNRELEASED
+   */
   public void update_nickname (string nickname)
     {
       if (this._nickname != nickname)
@@ -798,6 +915,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's structured name.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link NameDetails.structured_name} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param structured_name persona's new structured name
+   * @since UNRELEASED
+   */
   public void update_structured_name (StructuredName? structured_name)
     {
       if (structured_name != null && !((!) structured_name).is_empty ())
@@ -812,6 +940,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's avatar.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link AvatarDetails.avatar} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param avatar persona's new avatar
+   * @since UNRELEASED
+   */
   public void update_avatar (LoadableIcon? avatar)
     {
       if ((this._avatar == null) != (avatar == null) ||
@@ -823,6 +962,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's URIs.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link UrlDetails.urls} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param urls persona's new URIs
+   * @since UNRELEASED
+   */
   public void update_urls (Set<UrlFieldDetails> urls)
     {
       if (!Utils.set_afd_equal (urls, this._urls))
@@ -833,6 +983,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's IM addresses.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link ImDetails.im_addresses} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param im_addresses persona's new IM addresses
+   * @since UNRELEASED
+   */
   public void update_im_addresses (
       MultiMap<string, ImFieldDetails> im_addresses)
     {
@@ -846,16 +1007,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
-  public void _update_groups (Set<string> groups)
-    {
-      if (!Folks.Internal.equal_sets<string> (groups, this._groups))
-        {
-          this._groups = this._dup_to_hash_set<string> (groups);
-          this._groups_ro = this._groups.read_only_view;
-          this.notify_property ("groups");
-        }
-   }
-
+  /**
+   * Update persona's phone numbers.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link PhoneDetails.phone_numbers} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param phone_numbers persona's new phone numbers
+   * @since UNRELEASED
+   */
   public void update_phone_numbers (Set<PhoneFieldDetails> phone_numbers)
     {
       if (!Folks.Internal.equal_sets<PhoneFieldDetails> (phone_numbers,
@@ -868,6 +1030,18 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
    }
 
+  /**
+   * Update persona's postal addresses.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link PostalAddressDetails.postal_addresses} property. It is intended to
+   * be used for testing code which consumes this property. If the property
+   * value changes, this results in a property change notification on the
+   * persona.
+   *
+   * @param postal_addresses persona's new postal addresses
+   * @since UNRELEASED
+   */
   public void update_postal_addresses (
       Set<PostalAddressFieldDetails> postal_addresses)
     {
@@ -882,6 +1056,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's local IDs.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link LocalIdDetails.local_ids} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param local_ids persona's new local IDs
+   * @since UNRELEASED
+   */
   public void update_local_ids (Set<string> local_ids)
     {
       /* Make sure it includes our local ID. */
@@ -895,6 +1080,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's status as a favourite.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link FavouriteDetails.is_favourite} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
+   *
+   * @param is_favourite persona's new status as a favourite
+   * @since UNRELEASED
+   */
   public void update_is_favourite (bool is_favourite)
     {
       if (is_favourite != this._is_favourite)
@@ -904,6 +1100,17 @@ public class Dummyf.FatPersona : Dummyf.Persona,
         }
     }
 
+  /**
+   * Update persona's anti-links.
+   *
+   * This simulates a backing-store-side update of the persona's
+   * {@link AntiLinkable.anti_links} property. It is intended to be used for
+   * testing code which consumes this property. If the property value changes,
+   * this results in a property change notification on the persona.
+   *
+   * @param anti_links persona's new anti-links
+   * @since UNRELEASED
+   */
   public void update_anti_links (Set<string> anti_links)
     {
       if (!Folks.Internal.equal_sets<string> (anti_links, this._anti_links))

@@ -340,5 +340,5 @@ public abstract class Folks.TestCase : Object
               GLib.on_error_stack_trace ("libtool --mode=execute gdb");
             }
         }
-    }
+   }
 }
