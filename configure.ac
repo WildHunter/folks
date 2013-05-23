@@ -289,6 +289,8 @@ AS_IF([test \
         ! -e ${sd}tests/folks/backend_loading_vala.stamp -o \
         ! -e ${sd}tests/key-file/individual_retrieval_vala.stamp -o \
         ! -e ${sd}tests/lib/folks-test.vapi -o \
+        ! -e ${sd}tests/lib/dummy/dummy-test.vapi -o \
+        ! -e ${sd}tests/lib/dummy/libdummy_test_la_vala.stamp -o \
         ! -e ${sd}tests/lib/key-file/kf-test.vapi -o \
         ! -e ${sd}tests/lib/key-file/libkf_test_la_vala.stamp -o \
         ! -e ${sd}tests/lib/telepathy/contactlist/tp-test-contactlist.gir -o \
@@ -298,6 +300,7 @@ AS_IF([test \
         ! -e ${sd}tests/telepathy/individual_retrieval_vala.stamp -o \
         ! -e ${sd}tests/telepathy/individual_properties_vala.stamp -o \
         ! -e ${sd}tests/folks/backend_loading_vala.stamp -o \
+        ! -e ${sd}backends/dummy/dummy_la_vala.stamp -o \
         ! -e ${sd}backends/key-file/key_file_la_vala.stamp -o \
         ! -e ${sd}backends/telepathy/telepathy_la_vala.stamp \
                 -o \
@@ -671,6 +674,7 @@ AC_CONFIG_FILES([
     tests/lib/Makefile
     tests/lib/folks-test-uninstalled.pc
     tests/lib/eds/Makefile
+    tests/lib/dummy/Makefile
     tests/lib/key-file/Makefile
     tests/lib/libsocialweb/Makefile
     tests/lib/telepathy/Makefile

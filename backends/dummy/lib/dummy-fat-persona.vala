@@ -35,7 +35,7 @@ using GLib;
  *
  * @since UNRELEASED
  */
-public class Dummyf.FatPersona : Dummyf.Persona,
+public class Dummy.FatPersona : Dummy.Persona,
     AntiLinkable,
     AvatarDetails,
     BirthdayDetails,

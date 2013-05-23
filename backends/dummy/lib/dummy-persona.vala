@@ -32,7 +32,7 @@ using GLib;
  *
  * @since UNRELEASED
  */
-public class Dummyf.Persona : Folks.Persona
+public class Dummy.Persona : Folks.Persona
 {
   private string[] _linkable_properties = new string[0];
 
