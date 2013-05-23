@@ -1,8 +1,10 @@
 BACKEND_NAME = "dummy"
 
 AM_CPPFLAGS = \
+	-I$(top_srcdir) \
 	-I$(top_srcdir)/folks \
 	-include $(CONFIG_HEADER) \
+	-include folks/redeclare-internal-api.h \
 	-DPACKAGE_DATADIR=\"$(pkgdatadir)\" \
 	-DBACKEND_NAME=\"$(BACKEND_NAME)\" \
 	-DG_LOG_DOMAIN=\"$(BACKEND_NAME)\" \
@@ -44,7 +46,7 @@ libfolks_dummy_la_VALAFLAGS = \
 	--vapidir=$(top_srcdir)/folks \
 	--pkg folks \
 	--pkg folks-internal \
-	--pkg gee-1.0 \
+	--pkg gee-0.8 \
 	--pkg gio-2.0 \
 	--pkg gobject-2.0 \
 	--includedir folks \

@@ -26,12 +26,12 @@ if ENABLE_EDS
 SUBDIRS += eds
 endif
 
-if ENABLE_DUMMNY
-SUBDIRS += dummy
+if ENABLE_DUMMY
+#SUBDIRS += dummy
 endif
 
 DIST_SUBDIRS = \
-	dummy \
+	#dummy \
 	key-file \
 	telepathy \
 	eds \

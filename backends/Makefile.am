@@ -23,6 +23,10 @@ if ENABLE_OFONO
 SUBDIRS += ofono
 endif
 
+if ENABLE_DUMMY
+SUBDIRS += dummy
+endif
+
 DIST_SUBDIRS = \
 	eds \
 	key-file \
@@ -30,6 +34,7 @@ DIST_SUBDIRS = \
 	ofono \
 	telepathy \
 	tracker \
+    dummy \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

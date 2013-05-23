@@ -70,6 +70,14 @@ AC_SUBST([FOLKS_MAJOR_MINOR_VERSION])
 API_VERSION=0.6
 AC_SUBST([API_VERSION])
 
+AC_ARG_ENABLE(dummy-backend,
+        AC_HELP_STRING([--enable-dummy-backend],
+                       [ build the Dummy backend]),
+        enable_dummy_backend=$enableval,
+        enable_dummy_backend=yes )
+
+AM_CONDITIONAL([ENABLE_DUMMY], [test "x$enable_dummy_backend" = "xyes"])
+
 AC_ARG_ENABLE(tracker-backend,
         AC_HELP_STRING([--enable-tracker-backend],
                        [ build the Tracker backend]),
@@ -662,7 +670,6 @@ AC_CONFIG_FILES([
     tests/tracker/Makefile
     tests/lib/Makefile
     tests/lib/folks-test-uninstalled.pc
-    tests/lib/dummy/Makefile
     tests/lib/eds/Makefile
     tests/lib/key-file/Makefile
     tests/lib/libsocialweb/Makefile
@@ -693,6 +700,7 @@ Configure summary:
         Libsocialweb backend........:  ${have_libsocialweb_backend}
         E-D-S backend...............:  ${enable_eds_backend}
         Ofono backend...............:  ${enable_ofono_backend}
+        Dummy backend...............:  ${enable_dummy_backend}
         Zeitgeist support...........:  ${have_zeitgeist}
         Build tests.................:  ${enable_tests}
 "

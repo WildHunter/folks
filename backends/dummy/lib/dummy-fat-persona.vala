@@ -87,8 +87,8 @@ public class Dummyf.FatPersona : Dummyf.Persona,
   private HashMultiMap<string, WebServiceFieldDetails> _web_service_addresses =
       new HashMultiMap<string, WebServiceFieldDetails> (
           null, null,
-          (GLib.HashFunc) WebServiceFieldDetails.hash,
-          (GLib.EqualFunc) WebServiceFieldDetails.equal);
+          AbstractFieldDetails<string>.hash_static,
+          AbstractFieldDetails<string>.equal_static);
 
   /**
    * {@inheritDoc}
@@ -215,8 +215,8 @@ public class Dummyf.FatPersona : Dummyf.Persona,
 
   private HashSet<EmailFieldDetails>? _email_addresses =
       new HashSet<EmailFieldDetails> (
-          (GLib.HashFunc) EmailFieldDetails.hash,
-          (GLib.EqualFunc) EmailFieldDetails.equal);
+          AbstractFieldDetails<string>.hash_static,
+          AbstractFieldDetails<string>.equal_static);
   private Set<EmailFieldDetails> _email_addresses_ro;
 
   /**
@@ -439,8 +439,8 @@ public class Dummyf.FatPersona : Dummyf.Persona,
 
   private HashMultiMap<string, ImFieldDetails> _im_addresses =
       new HashMultiMap<string, ImFieldDetails> (null, null,
-          (GLib.HashFunc) ImFieldDetails.hash,
-          (GLib.EqualFunc) ImFieldDetails.equal);
+          AbstractFieldDetails<string>.hash_static,
+          AbstractFieldDetails<string>.equal_static);
 
   /**
    * {@inheritDoc}

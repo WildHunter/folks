@@ -152,10 +152,18 @@ public class AggregationTests : TpfTest.MixedTestCase
 
       Idle.add (() =>
         {
-          this.test_iid_async.begin ((s, r) =>
+          aggregator.prepare.begin ((s,r) =>
             {
-              this.test_iid_async.end (r);
-              main_loop.quit ();
+              try
+                {
+                  aggregator.prepare.end (r);
+                }
+              catch (GLib.Error e1)
+                {
+                  GLib.critical ("Failed to prepare aggregator: %s",
+                    e1.message);
+                  assert_not_reached ();
+                }
             });
 
           return false;
@@ -1372,3 +1380,4 @@ public int main (string[] args)
 
   return 0;
 }
+

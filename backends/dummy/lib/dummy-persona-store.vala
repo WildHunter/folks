@@ -316,6 +316,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       assert (persona != null);
       persona.update_writeable_properties (this.always_writeable_properties);
 
+
       var iter = HashTableIter<string, Value?> (details);
       unowned string k;
       unowned Value? _v;

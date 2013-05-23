@@ -80,7 +80,7 @@ public class IndividualRetrievalTests : KfTest.TestCase
       /* Kill the main loop after a few seconds. If there are still individuals
        * in the set of expected individuals, the aggregator has either failed
        * or been too slow (which we can consider to be failure). */
-      TestUtils.loop_run_with_non_fatal_timeout (main_loop, 3);
+      TestUtils.loop_run_with_timeout (main_loop, 3);
 
       /* We should have enumerated exactly the individuals in the set */
       assert (expected_individuals.size == 0);
@@ -125,7 +125,7 @@ public class IndividualRetrievalTests : KfTest.TestCase
       /* Kill the main loop after a few seconds. If there are still individuals
        * in the set of expected individuals, the aggregator has either failed
        * or been too slow (which we can consider to be failure). */
-      TestUtils.loop_run_with_non_fatal_timeout (main_loop, 3);
+      TestUtils.loop_run_with_timeout (main_loop, 3);
 
       /* We should have enumerated exactly one individual */
       assert (individuals_changed_count == 1);

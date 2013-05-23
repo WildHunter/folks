@@ -2,8 +2,7 @@ SUBDIRS = lib
 
 BACKEND_NAME = "dummy"
 
-VALAFLAGS += \
-	$(AM_VALAFLAGS) \
+AM_VALAFLAGS += \
 	$(ERROR_VALAFLAGS) \
 	--vapidir=. \
 	--vapidir=$(top_builddir)/backends/dummy/lib \
@@ -22,7 +21,7 @@ dummy_deps = \
 	folks \
 	folks-internal \
 	folks-dummy \
-	gee-1.0 \
+	gee-0.8 \
 	gio-2.0 \
 	gobject-2.0 \
 	$(NULL)
