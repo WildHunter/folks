@@ -7,6 +7,10 @@ SUBDIRS = \
 	tools \
 	$(NULL)
 
+if ENABLE_DUMMY
+SUBDIRS += dummy
+endif
+
 if ENABLE_TELEPATHY
 SUBDIRS += folks telepathy
 endif
@@ -30,6 +34,7 @@ DIST_SUBDIRS = \
 	lib \
 	tools \
 	folks \
+    dummy \
 	eds \
 	key-file \
 	telepathy \

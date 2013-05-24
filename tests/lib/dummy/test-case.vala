@@ -26,7 +26,7 @@ using Gee;
  * A test case for the dummy backend, which is configured as the
  * primary store and as the only backend allowed.
  */
-public class Dummy.TestCase : Folks.TestCase
+public class DummyTest.TestCase : Folks.TestCase
 {
   /**
    * The dummy test backend.
@@ -50,22 +50,34 @@ public class Dummy.TestCase : Folks.TestCase
       base.set_up ();
 
       this.dummy_backend = new Dummy.Backend ();
+      this.configure_primary_store ();
+
       this.dummy_backend.prepare.begin((obj, res) => {
         try { 
           this.dummy_backend.prepare.end(res);
-        } catch (GLib.Error error) {
+        } catch (GLib.Error e) {
+          GLib.warning ("[PrepareDummyBackendError] %s\n", e.message);
         } 
       });
-      this.configure_primary_store ();
     }
 
   public virtual void configure_primary_store ()
     {
       var persona_stores = new HashSet<PersonaStore>();
-      string[] writable_properties = {"birthday", "email-addresses", "full-name"};
-      this.dummy_persona_store = new Dummy.PersonaStore("dummy", "Dummy personas", writable_properties);
+      string[] writable_properties = { Folks.PersonaStore.detail_key(PersonaDetail.BIRTHDAY),
+          Folks.PersonaStore.detail_key(PersonaDetail.EMAIL_ADDRESSES),
+          Folks.PersonaStore.detail_key(PersonaDetail.PHONE_NUMBERS) };
+      this.dummy_persona_store = new Dummy.PersonaStore("dummy", "Dummy personas", writable_properties);        
 
-      persona_stores.add(this.dummy_persona_store);        
+      this.dummy_persona_store.prepare.begin((obj, res) => {
+        try { 
+          this.dummy_persona_store.prepare.end(res);
+        } catch (GLib.Error e) {
+          GLib.warning ("[PrepareDummyPersonaStoreError] %s\n", e.message);
+        } 
+      });
+
+      persona_stores.add(this.dummy_persona_store);
       this.dummy_backend.register_persona_stores(persona_stores);
     }
 

@@ -23,7 +23,7 @@ using Gee;
 using GLib;
 
 /**
- * A persona subclass which represents a single EDS contact. TODO
+ * A persona subclass which represents a single contact. TODO
  *
  * Each {@link Dummy.Persona} instance represents a single EDS {@link E.Contact}.
  * When the contact is modified (either by this folks client, or a different

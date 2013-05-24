@@ -7,31 +7,36 @@ AM_CPPFLAGS = \
 	$(GEE_CFLAGS) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/folks \
+	-I$(top_srcdir)/backends/dummy/lib \
 	-I$(top_srcdir)/tests/lib \
-	-I$(top_srcdir)/tests/lib/key-file \
+	-I$(top_srcdir)/tests/lib/dummy \
 	-include $(CONFIG_HEADER) \
 	$(NULL)
 
 LDADD = \
-	$(top_builddir)/tests/lib/key-file/libkf-test.la \
+	$(top_builddir)/tests/lib/dummy/libdummy-test.la \
 	$(top_builddir)/tests/lib/libfolks-test.la \
+	$(top_builddir)/backends/dummy/lib/libfolks-dummy.la \
 	$(top_builddir)/folks/libfolks.la \
 	$(GLIB_LIBS) \
 	$(GEE_LIBS) \
+	-L$(top_srcdir)/backends/dummy/lib \
 	$(NULL)
 
 AM_VALAFLAGS += \
 	$(ERROR_VALAFLAGS) \
 	--vapidir=. \
 	--vapidir=$(top_srcdir)/folks \
+	--vapidir=$(top_srcdir)/backends/dummy/lib \
 	--vapidir=$(top_srcdir)/tests/lib \
-	--vapidir=$(top_srcdir)/tests/lib/key-file \
+	--vapidir=$(top_srcdir)/tests/lib/dummy \
 	--pkg gobject-2.0 \
 	--pkg gio-2.0 \
 	--pkg gee-0.8 \
 	--pkg folks \
+	--pkg folks-dummy \
 	--pkg folks-test \
-	--pkg kf-test \
+	--pkg dummy-test \
 	-g \
 	$(NULL)
 

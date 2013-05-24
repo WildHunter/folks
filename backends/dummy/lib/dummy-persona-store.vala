@@ -42,6 +42,7 @@ public class Dummy.PersonaStore : Folks.PersonaStore
   private bool _prepare_pending = false;
   private bool _is_quiescent = false;
   private bool _quiescent_on_prepare = false;
+  private int  _contact_id = 0;
 
   /**
    * The type of persona store this is.
@@ -302,7 +303,8 @@ public class Dummy.PersonaStore : Folks.PersonaStore
         }
 
       /* Allow overriding the class used. */
-      var contact_id = "TODO";
+      var contact_id = this._contact_id.to_string();
+      this._contact_id++;
       var uid = Folks.Persona.build_uid (BACKEND_NAME, this.id, contact_id);
       var iid = this.id + ":" + contact_id;
 
@@ -343,16 +345,20 @@ public class Dummy.PersonaStore : Folks.PersonaStore
               assert (_persona != null);
               _persona.full_name = _full_name;
             }
-          /* TODO */
-          /*else if (k == Folks.PersonaStore.detail_key (
+
+          else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.EMAIL_ADDRESSES))
             {
               Set<EmailFieldDetails> email_addresses =
                 (Set<EmailFieldDetails>) v.get_object ();
-              this._set_contact_attributes_string (contact,
-                  email_addresses,
-                  "EMAIL", E.ContactField.EMAIL);
+              if (email_addresses != null)
+                {
+                   var _persona = persona as EmailDetails;
+                   assert (_persona != null);
+                  _persona.email_addresses =  email_addresses;
+                }             
             }
+          /*
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.AVATAR))
             {
               try
@@ -366,21 +372,33 @@ public class Dummy.PersonaStore : Folks.PersonaStore
                       e1.message);
                 }
             }
+          */
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.IM_ADDRESSES))
             {
-              var im_fds = (MultiMap<string, ImFieldDetails>) v.get_object ();
-              this._set_contact_im_fds (contact, im_fds);
+              MultiMap<string,ImFieldDetails> im_addresses =
+                (MultiMap<string,ImFieldDetails>) v.get_object ();
+              if (im_addresses != null)
+                {
+                   var _persona = persona as ImDetails;
+                   assert (_persona != null);
+                  _persona.im_addresses = im_addresses;
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.PHONE_NUMBERS))
             {
               Set<PhoneFieldDetails> phone_numbers =
                 (Set<PhoneFieldDetails>) v.get_object ();
-              this._set_contact_attributes_string (contact,
-                  phone_numbers, "TEL",
-                  E.ContactField.TEL);
+
+              if (phone_numbers != null)
+                {
+                   var _persona = persona as PhoneDetails;
+                   assert (_persona != null);
+                  _persona.phone_numbers = phone_numbers;
+                }
             }
+          /*
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.POSTAL_ADDRESSES))
             {
