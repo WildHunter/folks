@@ -43,6 +43,7 @@ public class DummyTest.TestCase : Folks.TestCase
       base (name);
 
       Environment.set_variable ("FOLKS_BACKENDS_ALLOWED", "dummy", true);
+      Environment.set_variable ("FOLKS_PRIMARY_STORE", "dummy-store", true);
     }
 
   public override void set_up ()
@@ -51,34 +52,35 @@ public class DummyTest.TestCase : Folks.TestCase
 
       this.dummy_backend = new Dummy.Backend ();
       this.configure_primary_store ();
-
-      this.dummy_backend.prepare.begin((obj, res) => {
-        try { 
-          this.dummy_backend.prepare.end(res);
-        } catch (GLib.Error e) {
-          GLib.warning ("[PrepareDummyBackendError] %s\n", e.message);
-        } 
-      });
     }
 
   public virtual void configure_primary_store ()
     {
       var persona_stores = new HashSet<PersonaStore>();
-      string[] writable_properties = { Folks.PersonaStore.detail_key(PersonaDetail.BIRTHDAY),
-          Folks.PersonaStore.detail_key(PersonaDetail.EMAIL_ADDRESSES),
-          Folks.PersonaStore.detail_key(PersonaDetail.PHONE_NUMBERS) };
-      this.dummy_persona_store = new Dummy.PersonaStore("dummy", "Dummy personas", writable_properties);        
+      string[] writable_properties = { Folks.PersonaStore.detail_key (PersonaDetail.BIRTHDAY),
+          Folks.PersonaStore.detail_key (PersonaDetail.EMAIL_ADDRESSES),
+          Folks.PersonaStore.detail_key (PersonaDetail.PHONE_NUMBERS) };
 
-      this.dummy_persona_store.prepare.begin((obj, res) => {
-        try { 
-          this.dummy_persona_store.prepare.end(res);
-        } catch (GLib.Error e) {
-          GLib.warning ("[PrepareDummyPersonaStoreError] %s\n", e.message);
-        } 
-      });
+      this.dummy_persona_store = new Dummy.PersonaStore ("dummy-store", "Dummy personas", writable_properties);
+      this.dummy_persona_store.persona_type = typeof (Dummy.FatPersona);
 
-      persona_stores.add(this.dummy_persona_store);
-      this.dummy_backend.register_persona_stores(persona_stores);
+      var main_loop = new GLib.MainLoop (null, false);
+      this.dummy_backend.persona_store_added.connect ((store) => 
+        {
+            GLib.debug ("Persona store created\n");
+            main_loop.quit();        
+            main_loop = null;
+        });   
+
+      persona_stores.add (this.dummy_persona_store);
+      this.dummy_backend.register_persona_stores (persona_stores);
+
+      GLib.debug ("Wait for mainloop\n");
+      if (main_loop != null) 
+        {
+          TestUtils.loop_run_with_timeout (main_loop, 3);
+        }
+      GLib.debug ("Wait for mainloop:DONE\n");
     }
 
   public override void tear_down ()

@@ -27,8 +27,8 @@ public class IndividualRetrievalTests : DummyTest.TestCase
     {
       base ("IndividualRetrieval");
 
-      this.add_test ("singleton individuals", this.test_singleton_individuals);
-      this.add_test ("aliases", this.test_aliases);
+      this.add_test ("dummy individuals", this.test_singleton_individuals);
+      //this.add_test ("aliases", this.test_aliases);
     }
 
   private void add_persona_renato()
@@ -127,9 +127,7 @@ public class IndividualRetrievalTests : DummyTest.TestCase
   public void test_singleton_individuals ()
     {      
       var main_loop = new GLib.MainLoop (null, false);
-      this.add_persona_renato();
-      this.add_persona_rodrigo();
-
+     
       /* Set up the aggregator */
       var aggregator = new IndividualAggregator ();
       uint individuals_changed_count = 0;
@@ -148,13 +146,26 @@ public class IndividualRetrievalTests : DummyTest.TestCase
             {
               GLib.debug ("Contact added: %s\n", i.full_name);
             }
+          main_loop.quit();
         });
-      aggregator.prepare.begin ();
 
-      /* Kill the main loop after a few seconds. If there are still individuals
-       * in the set of expected individuals, the aggregator has either failed
-       * or been too slow (which we can consider to be failure). */
-      TestUtils.loop_run_with_timeout (main_loop, 3);
+      aggregator.prepare.begin ((obj, res) => {
+        try {
+          GLib.debug ("Aggregator READY");
+          aggregator.prepare.end(res);
+
+          this.add_persona_renato();
+          this.add_persona_rodrigo();
+
+        } catch (GLib.Error e) {
+          GLib.warning ("[AggregatorError] Fail to prepare aggregator: %s\n",
+              e.message);
+        }
+      });
+
+      TestUtils.loop_run_with_timeout (main_loop, 10);
+
+      assert (individuals_changed_count == 1);
     }
 
   public void test_aliases ()

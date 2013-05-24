@@ -349,14 +349,16 @@ public class Dummy.PersonaStore : Folks.PersonaStore
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.EMAIL_ADDRESSES))
             {
-              Set<EmailFieldDetails> email_addresses =
-                (Set<EmailFieldDetails>) v.get_object ();
-              if (email_addresses != null)
+              var _persona = persona as EmailDetails;
+              if (_persona != null)
                 {
-                   var _persona = persona as EmailDetails;
-                   assert (_persona != null);
-                  _persona.email_addresses =  email_addresses;
-                }             
+                  Set<EmailFieldDetails> email_addresses =
+                      (Set<EmailFieldDetails>) v.get_object ();
+                  if (email_addresses != null)
+                    {
+                      _persona.email_addresses =  email_addresses;
+                    }             
+                }
             }
           /*
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.AVATAR))
@@ -376,26 +378,29 @@ public class Dummy.PersonaStore : Folks.PersonaStore
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.IM_ADDRESSES))
             {
-              MultiMap<string,ImFieldDetails> im_addresses =
-                (MultiMap<string,ImFieldDetails>) v.get_object ();
-              if (im_addresses != null)
+              var _persona = persona as ImDetails;
+              if (_persona != null)
                 {
-                   var _persona = persona as ImDetails;
-                   assert (_persona != null);
-                  _persona.im_addresses = im_addresses;
+                  MultiMap<string,ImFieldDetails> im_addresses =
+                    (MultiMap<string,ImFieldDetails>) v.get_object ();
+                  if (im_addresses != null)
+                    {
+                      _persona.im_addresses = im_addresses;
+                    }
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.PHONE_NUMBERS))
             {
-              Set<PhoneFieldDetails> phone_numbers =
-                (Set<PhoneFieldDetails>) v.get_object ();
-
-              if (phone_numbers != null)
+              var _persona = persona as PhoneDetails;
+              if (_persona != null)
                 {
-                   var _persona = persona as PhoneDetails;
-                   assert (_persona != null);
-                  _persona.phone_numbers = phone_numbers;
+                  Set<PhoneFieldDetails> phone_numbers =
+                    (Set<PhoneFieldDetails>) v.get_object ();
+                  if (phone_numbers != null)
+                    {
+                       _persona.phone_numbers = phone_numbers;
+                    }
                 }
             }
           /*
