@@ -74,6 +74,8 @@ public class IndividualRetrievalTests : KfTest.TestCase
             {
               assert (i == null);
             }
+
+          main_loop.quit();
         });
       aggregator.prepare.begin ();
 
@@ -119,6 +121,8 @@ public class IndividualRetrievalTests : KfTest.TestCase
             {
               assert (i == null);
             }
+
+          main_loop.quit();
         });
       aggregator.prepare.begin ();
 
